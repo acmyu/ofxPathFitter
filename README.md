@@ -23,9 +23,9 @@ Usage
     double tolerance = 10;
     bool closed = false;
     ofxPathFitter fitter(vertices, closed);
-    vector<Segment> bezier = fitter.fit(tolerance); // creates the Bezier curve through the points
+    vector<BezPoint> bezier = fitter.fit(tolerance); // creates the Bezier curve through the points
 
-Segment contains 3 fields:
+BezPoint contains 3 fields:
 
     ofPoint point; // the point
     ofPoint handleIn; // the first control point
@@ -33,8 +33,8 @@ Segment contains 3 fields:
 
 Note: the control points contain the coordinates relative to the point. To get the absolute coordinates:
 
-    Segment s = ofxPathFitter::handleAbsolute(bezier[i]);
+    BezPoint s = ofxPathFitter::handleAbsolute(bezier[i]);
 
 or
 
-    vector<Segment> bezierAbs = ofxPathFitter::handlesAbsolute(bezier);
+    vector<BezPoint> bezierAbs = ofxPathFitter::handlesAbsolute(bezier);

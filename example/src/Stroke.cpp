@@ -27,11 +27,11 @@ void Stroke::drawActive(int smoothness) {
 	displayStroke.draw();
 }
 
-void Stroke::drawEditableVertex(Segment pt) {
+void Stroke::drawEditableVertex(BezPoint pt) {
 	ofSetColor(255);
 	ofDrawCircle(pt.point, 5);
 	ofNoFill();
-	Segment ptAbs = ofxPathFitter::handleAbsolute(pt);
+	BezPoint ptAbs = ofxPathFitter::handleAbsolute(pt);
 	if (pt.handleIn.x != 0 && pt.handleIn.y != 0) {
 		ofDrawLine(pt.point, ptAbs.handleIn);
 		ofDrawCircle(ptAbs.handleIn, 5);
@@ -47,7 +47,7 @@ void Stroke::drawEditableVertex(Segment pt) {
 void Stroke::drawEditable(int iSelectedVertex) {
 	ofSetColor(100);
 	for (int i = 0; i<lineBez.size(); i++) {
-		Segment pt = lineBez[i];
+		BezPoint pt = lineBez[i];
 		if (i == iSelectedVertex) {
 			drawEditableVertex(pt);
 		}
@@ -78,7 +78,7 @@ void Stroke::updateBez() {
 
 void Stroke::updateLine(bool simplify) {
 	ofPolyline newLine;
-	vector<Segment> lineBezAbs = ofxPathFitter::handlesAbsolute(lineBez);
+	vector<BezPoint> lineBezAbs = ofxPathFitter::handlesAbsolute(lineBez);
 	newLine.addVertex(lineBezAbs.front().point);
 	for (int i = 1; i < lineBezAbs.size(); i++) {
 		newLine.bezierTo(lineBezAbs[i - 1].handleOut, lineBezAbs[i].handleIn, lineBezAbs[i].point);
@@ -112,7 +112,7 @@ void Stroke::modifyVertex(int id, int x, int y) {
 int Stroke::getSelectedVertex(int iSelectedVertex, int &handle, int x, int y) {
 	handle = -1;
 	for (int i = 0; i < lineBez.size(); i++) {
-		Segment s = ofxPathFitter::handleAbsolute(lineBez[i]);
+		BezPoint s = ofxPathFitter::handleAbsolute(lineBez[i]);
 		if (ofDist(s.point.x, s.point.y, x, y) < SELECTPADDING) {
 			handle = POINT;
 		}

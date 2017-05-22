@@ -12,7 +12,7 @@
 
 class Stroke
 {
-	void drawEditableVertex(Segment vertex);
+	void drawEditableVertex(BezPoint vertex);
 
 public:
 	Stroke();
@@ -40,7 +40,7 @@ public:
 	void translateLine(ofVec2f lastMousePos, int x, int y);
 	
 	ofPolyline line;
-	vector<Segment> lineBez;
+	vector<BezPoint> lineBez;
 
 };
 

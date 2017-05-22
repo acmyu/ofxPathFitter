@@ -7,12 +7,12 @@ PathFitterError::PathFitterError(int i, double err) {
     error = err;
 }
 
-Segment::~Segment() {}
-Segment::Segment() {}
-Segment::Segment(ofPoint pt) {
+BezPoint::~BezPoint() {}
+BezPoint::BezPoint() {}
+BezPoint::BezPoint(ofPoint pt) {
     point = pt;
 }
-Segment::Segment(ofPoint pt, ofPoint h) {
+BezPoint::BezPoint(ofPoint pt, ofPoint h) {
     point = pt;
     handleIn = h;
 }
@@ -30,44 +30,44 @@ ofxPathFitter::ofxPathFitter(vector<ofPoint> pts, bool isClosed)
     }
 }
 
-Segment ofxPathFitter::handleAbsolute(Segment s) {
+BezPoint ofxPathFitter::handleAbsolute(BezPoint s) {
 	s.handleIn = add(s.point, s.handleIn);
 	s.handleOut = add(s.point, s.handleOut);
 	return s;
 }
 
-vector<Segment> ofxPathFitter::handlesAbsolute(vector<Segment> segments) {
-	for (int i = 0; i < segments.size(); i++) {
-		segments[i] = handleAbsolute(segments[i]);
+vector<BezPoint> ofxPathFitter::handlesAbsolute(vector<BezPoint> BezPoints) {
+	for (int i = 0; i < BezPoints.size(); i++) {
+		BezPoints[i] = handleAbsolute(BezPoints[i]);
 	}
-	return segments;
+	return BezPoints;
 }
 
-vector<Segment> ofxPathFitter::fit(double error) {
+vector<BezPoint> ofxPathFitter::fit(double error) {
     int length = points.size();
-    vector<Segment> segments;
+    vector<BezPoint> BezPoints;
     if (length > 0) {
-        segments.push_back(Segment(points.front()));
+        BezPoints.push_back(BezPoint(points.front()));
         if (length > 1) {
-            fitCubic(segments, error, 0, length - 1,
+            fitCubic(BezPoints, error, 0, length - 1,
                     subtract(points[1], points[0]),
                     subtract(points[length - 2], points[length - 1]));
             if (closed) {
-                segments.erase(segments.begin());
-                segments.pop_back();
+                BezPoints.erase(BezPoints.begin());
+                BezPoints.pop_back();
             }
         }
     }
 
-    return segments;
+    return BezPoints;
 }
 
-void ofxPathFitter::addCurve(vector<Segment> &segments, vector<ofPoint> curve) {
-	segments[segments.size() - 1].handleOut = subtract(curve[1], curve[0]);
-    segments.push_back(Segment(curve[3], subtract(curve[2], curve[3])));
+void ofxPathFitter::addCurve(vector<BezPoint> &BezPoints, vector<ofPoint> curve) {
+	BezPoints[BezPoints.size() - 1].handleOut = subtract(curve[1], curve[0]);
+    BezPoints.push_back(BezPoint(curve[3], subtract(curve[2], curve[3])));
 }
 
-void ofxPathFitter::fitCubic(vector<Segment> &segments, double error, int first, int last, ofPoint tan1, ofPoint tan2) {
+void ofxPathFitter::fitCubic(vector<BezPoint> &BezPoints, double error, int first, int last, ofPoint tan1, ofPoint tan2) {
     if (last - first == 1) {
         ofPoint pt1 = points[first];
         ofPoint pt2 = points[last];
@@ -77,7 +77,7 @@ void ofxPathFitter::fitCubic(vector<Segment> &segments, double error, int first,
         curve.push_back(add(pt1, normalize(tan1, dist)));
         curve.push_back(add(pt2, normalize(tan2, dist)));
         curve.push_back(pt2);
-        addCurve(segments, curve);
+        addCurve(BezPoints, curve);
         return;
     }
     vector<double> uPrime = chordLengthParameterize(first, last);
@@ -88,7 +88,7 @@ void ofxPathFitter::fitCubic(vector<Segment> &segments, double error, int first,
         vector<ofPoint> curve = generateBezier(first, last, uPrime, tan1, tan2);
         PathFitterError max = findMaxError(first, last, curve, uPrime);
         if (max.error < error && parametersInOrder) {
-            addCurve(segments, curve);
+            addCurve(BezPoints, curve);
             return;
         }
         split = max.index;
@@ -98,8 +98,8 @@ void ofxPathFitter::fitCubic(vector<Segment> &segments, double error, int first,
         maxError = max.error;
     }
     ofPoint tanCenter = subtract(points[split - 1], points[split + 1]);
-    fitCubic(segments, error, first, split, tan1, tanCenter);
-    fitCubic(segments, error, split, last, multiply(tanCenter, -1), tan2);
+    fitCubic(BezPoints, error, first, split, tan1, tanCenter);
+    fitCubic(BezPoints, error, split, last, multiply(tanCenter, -1), tan2);
 }
 
 vector<ofPoint> ofxPathFitter::generateBezier(int first, int last, vector<double> uPrime, ofPoint tan1, ofPoint tan2) {

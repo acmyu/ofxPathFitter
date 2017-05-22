@@ -11,12 +11,12 @@ public:
     double error;
 };
 
-class Segment : public ofPolyline {
+class BezPoint : public ofPolyline {
 public:
-    ~Segment();
-    Segment();
-    Segment(ofPoint pt);
-    Segment(ofPoint pt, ofPoint h);
+    ~BezPoint();
+    BezPoint();
+    BezPoint(ofPoint pt);
+    BezPoint(ofPoint pt, ofPoint h);
     
     ofPoint point;
     ofPoint handleIn;
@@ -29,16 +29,16 @@ public:
     ofxPathFitter();
     ofxPathFitter(vector<ofPoint> pts, bool isClosed);
 
-	vector<Segment> fit(double error = 2.5);
-	static Segment handleAbsolute(Segment s);
-	static vector<Segment> handlesAbsolute(vector<Segment> segments);
+	vector<BezPoint> fit(double error = 2.5);
+	static BezPoint handleAbsolute(BezPoint s);
+	static vector<BezPoint> handlesAbsolute(vector<BezPoint> BezPoints);
     
 private:
     vector<ofPoint> points;
     bool closed;
     
-    void addCurve(vector<Segment> &segments, vector<ofPoint> curve);
-    void fitCubic(vector<Segment> &segments, double error, int first, int last, ofPoint tan1, ofPoint tan2);
+    void addCurve(vector<BezPoint> &BezPoints, vector<ofPoint> curve);
+    void fitCubic(vector<BezPoint> &BezPoints, double error, int first, int last, ofPoint tan1, ofPoint tan2);
     vector<ofPoint> generateBezier(int first, int last, vector<double> uPrime, ofPoint tan1, ofPoint tan2);
     bool reparameterize(int first, int last, vector<double> uPrime, vector<ofPoint> curve);
     double findRoot(vector<ofPoint> curve, ofPoint point, double u);
