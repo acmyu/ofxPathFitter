@@ -3,7 +3,7 @@ An OpenFrameworks addon for obtaining a Bezier curve through a set of points
 Based on [Paper.js path simplification](http://paperjs.org/examples/path-simplification/)
 
 # Example
-See my other project: [SimpleVectorEditor](SimpleVectorEditor/blob/master/), which uses this addon to simplify the lines that are drawn
+See my other project: [SimpleVectorEditor](https://github.com/acmyu/SimpleVectorEditor), which uses this addon to simplify the lines that are drawn
 
 <img src="img/edit.png" width="400">
 
