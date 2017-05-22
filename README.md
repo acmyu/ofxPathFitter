@@ -7,10 +7,6 @@ An OpenFrameworks addon for obtaining a Bezier curve through a set of points
 
 Based on [Paper.js path simplification](http://paperjs.org/examples/path-simplification/)
 
-License
--------
-State which license you offer your addon under. openFrameworks is distributed under the [MIT License](https://en.wikipedia.org/wiki/MIT_License), and you might consider using this for your repository. By default, `license.md` contains a copy of the MIT license to which you can add your name and the year.
-
 Installation
 ------------
 Just drop the folder into the `openFrameworks/addons/` folder.
