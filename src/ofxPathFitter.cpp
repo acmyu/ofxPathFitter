@@ -30,17 +30,23 @@ ofxPathFitter::ofxPathFitter(vector<ofPoint> pts, bool isClosed)
     }
 }
 
+vector<BezPoint> ofxPathFitter::simplify(ofPolyline line, double tolerance) {
+	return simplify(line.getVertices(), line.isClosed(), tolerance);
+}
+
 vector<BezPoint> ofxPathFitter::simplify(vector<ofPoint> pts, bool isClosed, double tolerance) {
 	ofxPathFitter lineFitter(pts, isClosed);
 	return lineFitter.fit(tolerance);
 }
 
-BezPoint ofxPathFitter::handleAbsolute(BezPoint s) {
+BezPoint ofxPathFitter::handleAbsolute(BezPoint s) { return handlesAbsolute(s);  }
+BezPoint ofxPathFitter::handlesAbsolute(BezPoint s) {
 	s.handleIn = add(s.point, s.handleIn);
 	s.handleOut = add(s.point, s.handleOut);
 	return s;
 }
 
+vector<BezPoint> ofxPathFitter::handleAbsolute(vector<BezPoint> BezPoints) { return handlesAbsolute(BezPoints); }
 vector<BezPoint> ofxPathFitter::handlesAbsolute(vector<BezPoint> BezPoints) {
 	for (int i = 0; i < BezPoints.size(); i++) {
 		BezPoints[i] = handleAbsolute(BezPoints[i]);

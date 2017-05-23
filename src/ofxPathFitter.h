@@ -29,11 +29,14 @@ public:
     ofxPathFitter();
     ofxPathFitter(vector<ofPoint> pts, bool isClosed);
 
+	static vector<BezPoint> simplify(ofPolyline line, double tolerance = 2.5);
 	static vector<BezPoint> simplify(vector<ofPoint> pts, bool isClosed, double tolerance = 2.5);
 	vector<BezPoint> fit(double error = 2.5);
 	static BezPoint handleAbsolute(BezPoint s);
+	static BezPoint handlesAbsolute(BezPoint s);
+	static vector<BezPoint> handleAbsolute(vector<BezPoint> BezPoints);
 	static vector<BezPoint> handlesAbsolute(vector<BezPoint> BezPoints);
-    
+
 private:
     vector<ofPoint> points;
     bool closed;

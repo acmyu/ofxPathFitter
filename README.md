@@ -19,10 +19,15 @@ See [SimpleVectorEditor](https://github.com/acmyu/SimpleVectorEditor), which use
 
 Usage
 -----
+    ofPolyline line = ...
     vector<ofPoint> vertices = line.getVertices(); // the set of points
     bool closed = false;
     double tolerance = 10;
     vector<BezPoint> bezier = ofxPathFitter::simplify(vertices, closed, tolerance); // creates the Bezier curve through the points
+    
+or 
+
+    bezier = ofxPathFitter::simplify(line, tolerance);
 
 BezPoint contains 3 fields:
 
@@ -32,7 +37,7 @@ BezPoint contains 3 fields:
 
 Note: the control points contain the coordinates relative to the point. To get the absolute coordinates:
 
-    BezPoint s = ofxPathFitter::handleAbsolute(bezier[i]);
+    BezPoint s = ofxPathFitter::handlesAbsolute(bezier[i]);
 
 or
 
