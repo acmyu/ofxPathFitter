@@ -29,6 +29,7 @@ public:
     ofxPathFitter();
     ofxPathFitter(vector<ofPoint> pts, bool isClosed);
 
+	static vector<BezPoint> simplify(vector<ofPoint> pts, bool isClosed, double tolerance = 2.5);
 	vector<BezPoint> fit(double error = 2.5);
 	static BezPoint handleAbsolute(BezPoint s);
 	static vector<BezPoint> handlesAbsolute(vector<BezPoint> BezPoints);

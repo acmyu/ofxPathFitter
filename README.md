@@ -20,10 +20,9 @@ See [SimpleVectorEditor](https://github.com/acmyu/SimpleVectorEditor), which use
 Usage
 -----
     vector<ofPoint> vertices = line.getVertices(); // the set of points
-    double tolerance = 10;
     bool closed = false;
-    ofxPathFitter fitter(vertices, closed);
-    vector<BezPoint> bezier = fitter.fit(tolerance); // creates the Bezier curve through the points
+    double tolerance = 10;
+    vector<BezPoint> bezier = ofxPathFitter::simplify(vertices, closed, tolerance); // creates the Bezier curve through the points
 
 BezPoint contains 3 fields:
 

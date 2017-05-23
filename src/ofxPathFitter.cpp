@@ -30,6 +30,11 @@ ofxPathFitter::ofxPathFitter(vector<ofPoint> pts, bool isClosed)
     }
 }
 
+vector<BezPoint> ofxPathFitter::simplify(vector<ofPoint> pts, bool isClosed, double tolerance) {
+	ofxPathFitter lineFitter(pts, isClosed);
+	return lineFitter.fit(tolerance);
+}
+
 BezPoint ofxPathFitter::handleAbsolute(BezPoint s) {
 	s.handleIn = add(s.point, s.handleIn);
 	s.handleOut = add(s.point, s.handleOut);
