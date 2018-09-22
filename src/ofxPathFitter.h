@@ -24,22 +24,27 @@ public:
 };
 
 class ofxPathFitter {
-public: 
-    ~ofxPathFitter();
-    ofxPathFitter();
-    ofxPathFitter(vector<ofPoint> pts, bool isClosed);
+public:
+    static const int NONE;
 
+    // Simplify a Bezier line
 	static vector<BezPoint> simplify(ofPolyline line, double tolerance = 2.5);
 	static vector<BezPoint> simplify(vector<ofPoint> pts, bool isClosed, double tolerance = 2.5);
-	vector<BezPoint> fit(double error = 2.5);
-	static BezPoint handleAbsolute(BezPoint s);
-	static BezPoint handlesAbsolute(BezPoint s);
-	static vector<BezPoint> handleAbsolute(vector<BezPoint> BezPoints);
-	static vector<BezPoint> handlesAbsolute(vector<BezPoint> BezPoints);
 
 private:
     vector<ofPoint> points;
     bool closed;
+    
+    ~ofxPathFitter();
+    ofxPathFitter();
+    ofxPathFitter(vector<ofPoint> pts, bool isClosed);
+    
+    // Simplify the Bezier line from an existing ofxPathFitter instance
+	vector<BezPoint> fit(double error = 2.5);
+    
+    // Converts the handles of a Bezier point or a list of Bezier points from relative coordinates to absolute coordinates
+	static BezPoint handlesAbsolute(BezPoint s);
+	static vector<BezPoint> handlesAbsolute(vector<BezPoint> BezPoints);
     
     void addCurve(vector<BezPoint> &BezPoints, vector<ofPoint> curve);
     void fitCubic(vector<BezPoint> &BezPoints, double error, int first, int last, ofPoint tan1, ofPoint tan2);

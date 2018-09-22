@@ -1,5 +1,7 @@
 #include "ofxPathFitter.h"
 
+const int ofxPathFitter::NONE = -1;
+
 PathFitterError::~PathFitterError() {}
 PathFitterError::PathFitterError() {}
 PathFitterError::PathFitterError(int i, double err) {
@@ -36,20 +38,31 @@ vector<BezPoint> ofxPathFitter::simplify(ofPolyline line, double tolerance) {
 
 vector<BezPoint> ofxPathFitter::simplify(vector<ofPoint> pts, bool isClosed, double tolerance) {
 	ofxPathFitter lineFitter(pts, isClosed);
-	return lineFitter.fit(tolerance);
+	return handlesAbsolute(lineFitter.fit(tolerance));
 }
 
-BezPoint ofxPathFitter::handleAbsolute(BezPoint s) { return handlesAbsolute(s);  }
 BezPoint ofxPathFitter::handlesAbsolute(BezPoint s) {
-	s.handleIn = add(s.point, s.handleIn);
-	s.handleOut = add(s.point, s.handleOut);
+	if (s.handleIn.x == 0 || s.handleIn.y == 0) {
+		s.handleIn.x = NONE;
+		s.handleIn.y = NONE;
+	}
+	else {
+		s.handleIn = add(s.point, s.handleIn);
+	}
+
+	if (s.handleOut.x == 0 || s.handleOut.y == 0) {
+		s.handleOut.x = NONE;
+		s.handleOut.y = NONE;
+	}
+	else {
+		s.handleOut = add(s.point, s.handleOut);
+	}
 	return s;
 }
 
-vector<BezPoint> ofxPathFitter::handleAbsolute(vector<BezPoint> BezPoints) { return handlesAbsolute(BezPoints); }
 vector<BezPoint> ofxPathFitter::handlesAbsolute(vector<BezPoint> BezPoints) {
 	for (int i = 0; i < BezPoints.size(); i++) {
-		BezPoints[i] = handleAbsolute(BezPoints[i]);
+		BezPoints[i] = handlesAbsolute(BezPoints[i]);
 	}
 	return BezPoints;
 }
