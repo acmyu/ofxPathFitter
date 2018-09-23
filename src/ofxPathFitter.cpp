@@ -1,7 +1,5 @@
 #include "ofxPathFitter.h"
 
-const int ofxPathFitter::NONE = -1;
-
 PathFitterError::~PathFitterError() {}
 PathFitterError::PathFitterError() {}
 PathFitterError::PathFitterError(int i, double err) {
@@ -10,13 +8,33 @@ PathFitterError::PathFitterError(int i, double err) {
 }
 
 BezPoint::~BezPoint() {}
-BezPoint::BezPoint() {}
+BezPoint::BezPoint() { isAbsolute = false; }
 BezPoint::BezPoint(ofPoint pt) {
     point = pt;
+	isAbsolute = false;
 }
 BezPoint::BezPoint(ofPoint pt, ofPoint h) {
+	point = pt;
+	handleIn = h;
+	isAbsolute = false;
+}
+BezPoint::BezPoint(ofPoint pt, ofPoint hIn, ofPoint hOut, bool abs) {
     point = pt;
-    handleIn = h;
+    handleIn = hIn;
+	handleOut = hOut;
+	isAbsolute = abs;
+}
+bool BezPoint::hasHandleIn() {
+	if (isAbsolute) return handleIn != point;
+	return handleIn.x != 0 && handleIn.y != 0;
+}
+bool BezPoint::hasHandleOut() {
+	if (isAbsolute) return handleOut != point;
+	return handleOut.x != 0 && handleOut.y != 0;
+}
+
+BezPoint BezPoint::handlesAbsolute() {
+	return BezPoint(point, handleIn + point, handleOut + point, true);
 }
 
 ofxPathFitter::~ofxPathFitter() {}
@@ -38,33 +56,7 @@ vector<BezPoint> ofxPathFitter::simplify(ofPolyline line, double tolerance) {
 
 vector<BezPoint> ofxPathFitter::simplify(vector<ofPoint> pts, bool isClosed, double tolerance) {
 	ofxPathFitter lineFitter(pts, isClosed);
-	return handlesAbsolute(lineFitter.fit(tolerance));
-}
-
-BezPoint ofxPathFitter::handlesAbsolute(BezPoint s) {
-	if (s.handleIn.x == 0 || s.handleIn.y == 0) {
-		s.handleIn.x = NONE;
-		s.handleIn.y = NONE;
-	}
-	else {
-		s.handleIn = add(s.point, s.handleIn);
-	}
-
-	if (s.handleOut.x == 0 || s.handleOut.y == 0) {
-		s.handleOut.x = NONE;
-		s.handleOut.y = NONE;
-	}
-	else {
-		s.handleOut = add(s.point, s.handleOut);
-	}
-	return s;
-}
-
-vector<BezPoint> ofxPathFitter::handlesAbsolute(vector<BezPoint> BezPoints) {
-	for (int i = 0; i < BezPoints.size(); i++) {
-		BezPoints[i] = handlesAbsolute(BezPoints[i]);
-	}
-	return BezPoints;
+	return lineFitter.fit(tolerance);
 }
 
 vector<BezPoint> ofxPathFitter::fit(double error) {

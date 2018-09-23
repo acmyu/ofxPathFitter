@@ -13,24 +13,29 @@ public:
 
 class BezPoint : public ofPolyline {
 public:
-    ~BezPoint();
-    BezPoint();
+
+	~BezPoint();
+	BezPoint();
     BezPoint(ofPoint pt);
-    BezPoint(ofPoint pt, ofPoint h);
+	BezPoint(ofPoint pt, ofPoint h);
+    BezPoint(ofPoint pt, ofPoint hIn, ofPoint hOut, bool abs = false);
     
     ofPoint point;
     ofPoint handleIn;
     ofPoint handleOut;
+	bool isAbsolute;
+
+	bool hasHandleIn();
+	bool hasHandleOut();
+	// Converts the handles of a Bezier point from relative coordinates to absolute coordinates
+	BezPoint handlesAbsolute();
 };
 
 class ofxPathFitter {
 public:
-    static const int NONE;
-
     // Simplify a Bezier line
 	static vector<BezPoint> simplify(ofPolyline line, double tolerance = 2.5);
 	static vector<BezPoint> simplify(vector<ofPoint> pts, bool isClosed, double tolerance = 2.5);
-
 private:
     vector<ofPoint> points;
     bool closed;
@@ -42,8 +47,6 @@ private:
     // Simplify the Bezier line from an existing ofxPathFitter instance
 	vector<BezPoint> fit(double error = 2.5);
     
-    // Converts the handles of a Bezier point or a list of Bezier points from relative coordinates to absolute coordinates
-	static BezPoint handlesAbsolute(BezPoint s);
 	static vector<BezPoint> handlesAbsolute(vector<BezPoint> BezPoints);
     
     void addCurve(vector<BezPoint> &BezPoints, vector<ofPoint> curve);
